@@ -13,6 +13,7 @@ DEFAULT_PIC_URL = "PicUrl"
 DEFAULT_QUES_TEXT = "clean_questiontext"
 DEFAULT_PROB_ID = "problemid"
 DEFAULT_STEP_NUM = "stepnumber"
+DEFAULT_USER_NAME = "admin"
 
 # KEYCODES
 KEYCODE_NEXT = 40  # 40 - Enter key pressed
@@ -22,4 +23,6 @@ KEYCODE_NEXT = 40  # 40 - Enter key pressed
 INITIAL_MESSAGE = "Please set the configuration from settings"
 UNABLE_TO_LOAD_MESSAGE = "Please select the correct dataset path from settings"
 COMPLETED_MESSAGE = "Reached end of file"
+INC_POPUP_TITLE = 'Answer Required'
+INC_POPUP_MSG = 'Please Answer all Questions'
 
