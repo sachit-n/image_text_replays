@@ -36,7 +36,8 @@ def get_step_num(df, idx, col):
     return int(df.iloc[idx][col] if idx < len(df) else 0)
 
 
-def get_replay_data(df, idx, config):
+def get_replay_data(df, config):
+    idx = int(config.get('replays', 'IDX'))
     ques_text = get_ques_text(df, idx, config.get("replays", "QUESTION_TEXT"))
     img_url = get_img_url(df, idx, config.get("replays", "PIC_URL"))
     prob_id = get_prob_id(df, idx, config.get("replays", 'PROBLEM_ID'))
@@ -55,7 +56,7 @@ class ScreenManagerApp(App):
     step_num = NumericProperty(0)
     ques_text = StringProperty(INITIAL_MESSAGE)
     img_url = StringProperty(None)
-    idx = NumericProperty(0)
+    curr_idx = NumericProperty(0)
 
     def build_config(self, config):
         config.setdefaults('replays', {
@@ -78,13 +79,13 @@ class ScreenManagerApp(App):
 
         Window.bind(on_key_down=self._on_keyboard_down)
 
-        self.idx = int(self.config.get('replays', 'IDX'))
+        self.curr_idx = int(self.config.get('replays', 'IDX'))
 
         try:
             img_df = pd.read_csv(self.config.get('replays', 'IMG_DF_PATH'))
             ques_df = pd.read_csv(self.config.get('replays', 'QUES_DF_PATH'))
             self.df = merge_crosswalks(img_df, ques_df, self.config)
-            self.prob_id, self.step_num, self.ques_text, self.img_url = get_replay_data(self.df, self.idx, self.config)
+            self.prob_id, self.step_num, self.ques_text, self.img_url = get_replay_data(self.df, self.config)
         except:
             self.ques_text = UNABLE_TO_LOAD_MESSAGE
 
@@ -96,32 +97,32 @@ class ScreenManagerApp(App):
 
     def next_replay(self):
         try:
-            self.idx += 1
-            self.prob_id, self.step_num, self.ques_text, self.img_url = get_replay_data(self.df, self.idx, self.config)
-            self.config.set('replays', 'IDX', self.idx)
+            self.curr_idx += 1
+            self.config.set('replays', 'IDX', self.curr_idx)
             self.config.write()
+            self.prob_id, self.step_num, self.ques_text, self.img_url = get_replay_data(self.df, self.config)
         except:
             self.ques_text = UNABLE_TO_LOAD_MESSAGE
 
     def prev_replay(self):
-        if self.idx != 0:
+        if self.curr_idx != 0:
             try:
-                self.idx -= 1
-                self.prob_id, self.step_num, self.ques_text, self.img_url = get_replay_data(self.df, self.idx, self.config)
-                self.config.set('replays', 'IDX', self.idx)
+                self.curr_idx -= 1
+                self.config.set('replays', 'IDX', self.curr_idx)
                 self.config.write()
+                self.prob_id, self.step_num, self.ques_text, self.img_url = get_replay_data(self.df, self.config)
             except:
                 self.ques_text = UNABLE_TO_LOAD_MESSAGE
 
     def on_config_change(self, config, section, key, value):
 
-        self.idx = int(self.config.get('replays', 'IDX'))
+        self.curr_idx = int(self.config.get('replays', 'IDX'))
 
         try:
             img_df = pd.read_csv(config.get('replays', 'IMG_DF_PATH'))
             ques_df = pd.read_csv(config.get('replays', 'QUES_DF_PATH'))
             self.df = merge_crosswalks(img_df, ques_df, self.config)
-            self.prob_id, self.step_num, self.ques_text, self.img_url = get_replay_data(self.df, self.idx, self.config)
+            self.prob_id, self.step_num, self.ques_text, self.img_url = get_replay_data(self.df, self.config)
         except:
             self.ques_text = UNABLE_TO_LOAD_MESSAGE
 

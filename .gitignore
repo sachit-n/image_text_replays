@@ -10,4 +10,4 @@ data/
 *.csv
 *.xlsx
 package
-kivy_reference/
+kivy_reference
