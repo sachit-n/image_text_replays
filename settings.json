@@ -1,0 +1,16 @@
+[
+    {"type": "numeric",
+     "title": "Index",
+     "desc": "Index to start/continue from",
+     "section": "replays",
+     "key": "idx"},
+    {"type": "path",
+     "title": "Images Crosswalk Path",
+     "desc": "File Location of Images Crosswalk",
+     "section": "replays",
+     "key": "img_df_path"},
+     {"type": "path",
+     "title": "Quesitons Crosswalk Path",
+     "desc": "File Location of Images Crosswalk",
+     "section": "replays",
+     "key": "ques_df_path"}]
