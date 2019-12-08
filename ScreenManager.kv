@@ -1,0 +1,109 @@
+#:import NoTransition kivy.uix.screenmanager.NoTransition
+#:import os os
+
+<ReplayScreen>:
+    id: replay
+    name: 'replays'
+    BoxLayout:
+        orientation: 'vertical'
+        spacing: 30
+        Label:
+            center: self.parent.center
+            text: app.ques_text if app else "unk"
+            font_size: 50
+            size_hint: 1, 0.3
+            text_size: self.width, None
+            padding_x: 50
+        BoxLayout:
+            size_hint: 1, 0.5
+            orientation: 'horizontal'
+            Label:
+                text: "Index: " + str(app.idx) + "\nProblem ID: " + str(app.prob_id) + "\nStep Number: " + str(app.step_num)
+                font_size: 30
+                size_hint: 0.2, 1
+                text_size: self.width, None
+                padding_x: 50
+            AsyncImage:
+                source: app.img_url if app else None
+                allow_stretch: True
+                keep_ratio: True
+                size_hint: 0.8, 1
+        Button:
+            text: 'Settings'
+            font_size: 30
+            on_release: app.open_settings()
+            size_hint: 0.1, 0.05
+
+        GridLayout:
+            size_hint: 1, 0.2
+            cols: 1
+            orientation: 'vertical'
+            spacing: 20
+            BoxLayout:
+                size_hint: 1, 0.25
+                orientation: 'horizontal'
+                Label:
+                    text: "Option1"
+                CheckBox:
+                    canvas.before:
+                        Color:
+                            rgba: 1, 1, 1, 1
+                        Rectangle:
+                            size: self.size
+                            pos: self.pos
+                    group: "q1"
+                Label:
+                    text: "Option2"
+                CheckBox:
+                    canvas.before:
+                        Color:
+                            rgba: 1, 1, 1, 1
+                        Rectangle:
+                            size: self.size
+                            pos: self.pos
+                    group: "q1"
+
+            BoxLayout:
+                size_hint: 1, 0.25
+                orientation: 'horizontal'
+                Label:
+                    text: "Option1"
+                CheckBox:
+                    canvas.before:
+                        Color:
+                            rgba: 1, 1, 1, 1
+                        Rectangle:
+                            size: self.size
+                            pos: self.pos
+                    group: "q2"
+                Label:
+                    text: "Option2"
+
+                CheckBox:
+                    canvas.before:
+                        Color:
+                            rgba: 1, 1, 1, 1
+                        Rectangle:
+                            size: self.size
+                            pos: self.pos
+                    group: "q2"
+
+
+            BoxLayout:
+                orientation: 'horizontal'
+                size_hint: 1, 0.5
+                Button:
+                    text: 'Previous'
+                    font_size: 80
+                    on_release: app.prev_replay()
+                Button:
+                    text: 'Next'
+                    font_size: 80
+                    on_release: app.next_replay()
+
+
+#<FirstTempScreen>:
+#    FileChooserIconView:
+#        id: filechooser
+#        path: os.getcwd()
+#        on_submit: app.root.start_replays(*args)
