@@ -80,7 +80,15 @@ class ScreenManagerApp(App):
         Window.bind(on_key_down=self._on_keyboard_down)
 
         self.curr_idx = int(self.config.get('replays', 'IDX'))
+        self.start_replay()
 
+        return ReplayScreen()
+
+    def _on_keyboard_down(self, instance, keyboard, keycode, text, modifiers):
+        if keycode == KEYCODE_NEXT:
+            self.next_replay()
+
+    def start_replay(self):
         try:
             img_df = pd.read_csv(self.config.get('replays', 'IMG_DF_PATH'))
             ques_df = pd.read_csv(self.config.get('replays', 'QUES_DF_PATH'))
@@ -88,12 +96,6 @@ class ScreenManagerApp(App):
             self.prob_id, self.step_num, self.ques_text, self.img_url = get_replay_data(self.df, self.config)
         except:
             self.ques_text = UNABLE_TO_LOAD_MESSAGE
-
-        return ReplayScreen()
-
-    def _on_keyboard_down(self, instance, keyboard, keycode, text, modifiers):
-        if keycode == KEYCODE_NEXT:
-            self.next_replay()
 
     def next_replay(self):
         try:
@@ -117,14 +119,7 @@ class ScreenManagerApp(App):
     def on_config_change(self, config, section, key, value):
 
         self.curr_idx = int(self.config.get('replays', 'IDX'))
-
-        try:
-            img_df = pd.read_csv(config.get('replays', 'IMG_DF_PATH'))
-            ques_df = pd.read_csv(config.get('replays', 'QUES_DF_PATH'))
-            self.df = merge_crosswalks(img_df, ques_df, self.config)
-            self.prob_id, self.step_num, self.ques_text, self.img_url = get_replay_data(self.df, self.config)
-        except:
-            self.ques_text = UNABLE_TO_LOAD_MESSAGE
+        self.start_replay()
 
 
 if __name__ == "__main__":
