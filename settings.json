@@ -43,4 +43,14 @@
      "title": "Step Number Column Name",
      "desc": "Name of Column Containing Step Number",
      "section": "replays",
-     "key": "STEP_NUM"}]
+     "key": "STEP_NUM"},
+     {"type": "path",
+     "title": "Output Dataset Path",
+     "desc": "Directory where output should be stored",
+     "section": "replays",
+     "key": "OUTPUT_DF_PATH"},
+     {"type": "string",
+     "title": "Username",
+     "desc": "Name of User",
+     "section": "replays",
+     "key": "USER"}]

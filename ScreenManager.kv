@@ -2,14 +2,18 @@
 #:import os os
 
 <ReplayScreen>:
-    id: replay
+    ques1opt1: q1o1
+    ques1opt2: q1o2
+    ques2opt1: q2o1
+    ques2opt2: q2o2
+
     name: 'replays'
     BoxLayout:
         orientation: 'vertical'
         spacing: 30
         Label:
             center: self.parent.center
-            text: app.ques_text if app else "unk"
+            text: root.ques_text
             font_size: 50
             size_hint: 1, 0.3
             text_size: self.width, None
@@ -18,13 +22,13 @@
             size_hint: 1, 0.5
             orientation: 'horizontal'
             Label:
-                text: "Index: " + str(app.idx) + "\nProblem ID: " + str(app.prob_id) + "\nStep Number: " + str(app.step_num)
+                text: "Index: " + str(root.curr_idx) + "\nProblem ID: " + str(root.prob_id) + "\nStep Number: " + str(root.step_num)
                 font_size: 30
                 size_hint: 0.2, 1
                 text_size: self.width, None
                 padding_x: 50
             AsyncImage:
-                source: app.img_url if app else None
+                source: root.img_url
                 allow_stretch: True
                 keep_ratio: True
                 size_hint: 0.8, 1
@@ -45,6 +49,7 @@
                 Label:
                     text: "Option1"
                 CheckBox:
+                    id: q1o1
                     canvas.before:
                         Color:
                             rgba: 1, 1, 1, 1
@@ -55,6 +60,7 @@
                 Label:
                     text: "Option2"
                 CheckBox:
+                    id: q1o2
                     canvas.before:
                         Color:
                             rgba: 1, 1, 1, 1
@@ -69,6 +75,7 @@
                 Label:
                     text: "Option1"
                 CheckBox:
+                    id: q2o1
                     canvas.before:
                         Color:
                             rgba: 1, 1, 1, 1
@@ -80,6 +87,7 @@
                     text: "Option2"
 
                 CheckBox:
+                    id: q2o2
                     canvas.before:
                         Color:
                             rgba: 1, 1, 1, 1
@@ -95,15 +103,8 @@
                 Button:
                     text: 'Previous'
                     font_size: 80
-                    on_release: app.prev_replay()
+                    on_release: root.prev_replay()
                 Button:
                     text: 'Next'
                     font_size: 80
-                    on_release: app.next_replay()
-
-
-#<FirstTempScreen>:
-#    FileChooserIconView:
-#        id: filechooser
-#        path: os.getcwd()
-#        on_submit: app.root.start_replays(*args)
+                    on_release: root.next_replay() if root.check_if_answered() else root.show_incomplete_popup()
