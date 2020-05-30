@@ -4,7 +4,7 @@ import os
 PRESET_NAME = 'Configuration'
 
 # Settings Panel Defaults
-JSON_SETTINGS_PATH = "/Users/sachitnagpal/upenn/image_replays/settings.json"
+#JSON_SETTINGS_PATH = "/Users/sachitnagpal/google_drive/learning_analytics/archive/image_replays/settings.json"
 DEFAULT_IDX = 0
 DEFAULT_DF_PATH = os.getcwd()
 DEFAULT_FOR_KEY = "ProblemId,StepNumber"

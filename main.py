@@ -165,7 +165,7 @@ class ScreenManagerApp(App):
             'USER': DEFAULT_USER_NAME})
 
     def build_settings(self, settings):
-        settings.add_json_panel(PRESET_NAME, self.config, "/Users/sachitnagpal/upenn/clean2/settings.json")
+        settings.add_json_panel(PRESET_NAME, self.config, "settings.json")
 
     def build(self):
         self.settings_cls = SettingsWithSidebar
