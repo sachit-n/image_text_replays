@@ -1,4 +1,4 @@
-# Not Quite Text Replays
+# LabelText
 
 This is a GUI application developed using Kivy on Python. It allows labelling data containing texts and corresponding images.
 
