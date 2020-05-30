@@ -1,6 +1,5 @@
 #:import NoTransition kivy.uix.screenmanager.NoTransition
 #:import os os
-
 <ReplayScreen>:
     ques1opt1: q1o1
     ques1opt2: q1o2
@@ -14,19 +13,19 @@
         Label:
             center: self.parent.center
             text: root.ques_text
-            font_size: 50
+            font_size: sp(30)
             size_hint: 1, 0.3
             text_size: self.width, None
-            padding_x: 50
+            padding_x: sp(30)
         BoxLayout:
             size_hint: 1, 0.5
             orientation: 'horizontal'
             Label:
                 text: "Index: " + str(root.curr_idx) + "\nProblem ID: " + str(root.prob_id) + "\nStep Number: " + str(root.step_num)
-                font_size: 30
+                font_size: sp(20)
                 size_hint: 0.2, 1
                 text_size: self.width, None
-                padding_x: 50
+                padding_x: sp(30)
             AsyncImage:
                 source: root.img_url
                 allow_stretch: True
@@ -34,7 +33,7 @@
                 size_hint: 0.8, 1
         Button:
             text: 'Settings'
-            font_size: 30
+            font_size: sp(20)
             on_release: app.open_settings()
             size_hint: 0.1, 0.05
 
@@ -42,7 +41,7 @@
             size_hint: 1, 0.2
             cols: 1
             orientation: 'vertical'
-            spacing: 20
+            spacing: sp(10)
             BoxLayout:
                 size_hint: 1, 0.25
                 orientation: 'horizontal'
@@ -102,9 +101,9 @@
                 size_hint: 1, 0.5
                 Button:
                     text: 'Previous'
-                    font_size: 80
+                    font_size: sp(50)
                     on_release: root.prev_replay()
                 Button:
                     text: 'Next'
-                    font_size: 80
+                    font_size: sp(50)
                     on_release: root.next_replay() if root.check_if_answered() else root.show_incomplete_popup()

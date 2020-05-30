@@ -1,4 +1,5 @@
 import os
+import json
 
 import pandas as pd
 
@@ -29,7 +30,7 @@ def get_ques_text(df, idx, col):
 
 
 def get_img_url(df, idx, col):
-    return df.iloc[idx][col] if idx < len(df) else None
+    return df.iloc[idx][col] if idx < len(df) else 'unk'
 
 
 def get_prob_id(df, idx, col):
@@ -94,6 +95,7 @@ class ReplayScreen(BoxLayout):
             self.next_replay() if self.check_if_answered() else self.show_incomplete_popup()
 
     def start_replay(self):
+        self.config = App.get_running_app().config
         try:
             img_df = pd.read_csv(self.config.get('replays', 'IMG_DF_PATH'))
             ques_df = pd.read_csv(self.config.get('replays', 'QUES_DF_PATH'))
@@ -126,21 +128,24 @@ class ReplayScreen(BoxLayout):
                 self.ques_text = UNABLE_TO_LOAD_MESSAGE
 
     def save_encodings(self):
-        curr_encoding = [self.curr_idx] + get_replay_data(self.df, self.config) + [self.ques1opt1.active,
-                                                                                   self.ques1opt2.active,
-                                                                                   self.ques2opt1.active,
-                                                                                   self.ques2opt2.active]
+        try:
+            curr_encoding = [self.curr_idx] + get_replay_data(self.df, self.config) + [self.ques1opt1.active,
+                                                                                       self.ques1opt2.active,
+                                                                                       self.ques2opt1.active,
+                                                                                       self.ques2opt2.active]
 
-        curr_df = pd.DataFrame([curr_encoding], columns=['idx',
-                                                         self.config.get("replays", "PROBLEM_ID"),
-                                                         self.config.get("replays", "STEP_NUM"),
-                                                         self.config.get("replays", "QUESTION_TEXT"),
-                                                         self.config.get("replays", "PIC_URL"),
-                                                         "ques1opt1", "ques1opt2",
-                                                         "ques2opt1", "ques2opt2"])
+            curr_df = pd.DataFrame([curr_encoding], columns=['idx',
+                                                             self.config.get("replays", "PROBLEM_ID"),
+                                                             self.config.get("replays", "STEP_NUM"),
+                                                             self.config.get("replays", "QUESTION_TEXT"),
+                                                             self.config.get("replays", "PIC_URL"),
+                                                             "ques1opt1", "ques1opt2",
+                                                             "ques2opt1", "ques2opt2"])
 
-        self.output_df = self.output_df.append(curr_df, ignore_index=True)
-        self.output_df.to_csv(self.output_path)
+            self.output_df = self.output_df.append(curr_df, ignore_index=True)
+            self.output_df.to_csv(self.output_path)
+        except:
+            self.ques_text = UNABLE_TO_LOAD_MESSAGE
 
 
 class ScreenManagerApp(App):
@@ -160,7 +165,7 @@ class ScreenManagerApp(App):
             'USER': DEFAULT_USER_NAME})
 
     def build_settings(self, settings):
-        settings.add_json_panel(PRESET_NAME, self.config, JSON_SETTINGS_PATH)
+        settings.add_json_panel(PRESET_NAME, self.config, "settings.json")
 
     def build(self):
         self.settings_cls = SettingsWithSidebar
@@ -170,6 +175,8 @@ class ScreenManagerApp(App):
 
     def on_config_change(self, config, section, key, value):
         App.get_running_app().root.curr_idx = int(self.config.get('replays', 'IDX'))
+        self.output_path = os.path.join(self.config.get("replays", "OUTPUT_DF_PATH"),
+                                        self.config.get("replays", "USER")+"_enc.csv")
         App.get_running_app().root.start_replay()
 
 
