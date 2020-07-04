@@ -25,28 +25,16 @@ def merge_crosswalks(img_df, ques_df, config):
     return ques_df.merge(img_df, left_on=primary_keys, right_on=foreign_keys)
 
 
-def get_ques_text(df, idx, col):
-    return df.iloc[idx][col] if idx < len(df) else COMPLETED_MESSAGE
-
-
-def get_img_url(df, idx, col):
-    return df.iloc[idx][col] if idx < len(df) else 'unk'
-
-
-def get_prob_id(df, idx, col):
-    return int(df.iloc[idx][col] if idx < len(df) else 0)
-
-
-def get_step_num(df, idx, col):
-    return int(df.iloc[idx][col] if idx < len(df) else 0)
+def get_obs(df, idx, col, default_message):
+    return df.iloc[idx][col] if idx < len(df) else default_message
 
 
 def get_replay_data(df, config):
     idx = int(config.get('replays', 'IDX'))
-    ques_text = get_ques_text(df, idx, config.get("replays", "QUESTION_TEXT"))
-    img_url = get_img_url(df, idx, config.get("replays", "PIC_URL"))
-    prob_id = get_prob_id(df, idx, config.get("replays", 'PROBLEM_ID'))
-    step_num = get_step_num(df, idx, config.get("replays", "STEP_NUM"))
+    ques_text = get_obs(df, idx, config.get("replays", "QUESTION_TEXT"), COMPLETED_MESSAGE)
+    img_url = get_obs(df, idx, config.get("replays", "PIC_URL"), 'unk')
+    prob_id = int(get_obs(df, idx, config.get("replays", 'PROBLEM_ID'), 0))
+    step_num = int(get_obs(df, idx, config.get("replays", "STEP_NUM"), 0))
 
     return [prob_id, step_num, ques_text, img_url]
 
@@ -91,6 +79,7 @@ class ReplayScreen(BoxLayout):
             return False
 
     def _on_keyboard_down(self, instance, keyboard, keycode, text, modifiers):
+
         if keycode == KEYCODE_NEXT:
             self.next_replay() if self.check_if_answered() else self.show_incomplete_popup()
 
